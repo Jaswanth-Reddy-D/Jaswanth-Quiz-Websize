@@ -111,12 +111,11 @@ function renderQuestion() {
 
   const q = questions[qIndex];
   const total = questions.length;
-  const catInfo = ALL_QUESTIONS[selectedCat];
+  const catInfo = ALL_QUESTIONS[selectedCat] || { icon: '✏️', name: 'Custom Quiz' };
 
   document.getElementById('q-num').textContent   = qIndex + 1;
   document.getElementById('q-total').textContent = total;
   document.getElementById('q-progress').style.width = ((qIndex / total) * 100) + '%';
-  document.getElementById('q-cat-label').textContent = catInfo.icon + ' ' + catInfo.name;
   document.getElementById('q-text').textContent  = q.q;
 
   // hide feedback / next
@@ -269,6 +268,112 @@ document.getElementById('btn-menu').addEventListener('click', () => {
   startBtn.textContent = 'Choose a category to begin';
   showScreen('screen-cat');
 });
+
+/* ────────── CUSTOM QUIZ BUILDER ────────── */
+let customQCount = 0;
+
+document.getElementById('custom-card').addEventListener('click', () => {
+  showScreen('screen-builder');
+  if (customQCount === 0) addQuestionBlock();
+});
+
+document.getElementById('builder-back').addEventListener('click', () => {
+  showScreen('screen-cat');
+});
+
+document.getElementById('add-q-btn').addEventListener('click', () => {
+  if (customQCount >= 20) return;
+  addQuestionBlock();
+});
+
+function addQuestionBlock() {
+  customQCount++;
+  const idx = customQCount;
+  const list = document.getElementById('q-builder-list');
+  const div = document.createElement('div');
+  div.className = 'q-builder-card';
+  div.dataset.qid = idx;
+  div.innerHTML = `
+    <div class="q-builder-top">
+      <span class="q-builder-num">QUESTION ${idx}</span>
+      ${idx > 1 ? `<button class="q-remove-btn" onclick="removeQuestion(${idx})">Remove</button>` : ''}
+    </div>
+    <textarea rows="2" placeholder="Type your question here…" class="q-text-input"></textarea>
+    <div class="opts-builder">
+      ${['A','B','C','D'].map((l,i) => `
+        <div class="opt-builder-row">
+          <input type="radio" class="opt-correct-radio" name="correct-${idx}" value="${i}"/>
+          <span class="opt-letter-label">${l}</span>
+          <input class="opt-builder-input" type="text" placeholder="Option ${l}" maxlength="80"/>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  list.appendChild(div);
+  div.querySelector('textarea').focus();
+}
+
+function removeQuestion(qid) {
+  const card = document.querySelector(`.q-builder-card[data-qid="${qid}"]`);
+  if (card) { card.remove(); customQCount--; renumberQuestions(); }
+}
+
+function renumberQuestions() {
+  document.querySelectorAll('.q-builder-card').forEach((card, i) => {
+    card.querySelector('.q-builder-num').textContent = `QUESTION ${i + 1}`;
+  });
+}
+
+document.getElementById('launch-btn').addEventListener('click', () => {
+  const errorEl = document.getElementById('build-error');
+  errorEl.classList.remove('show');
+
+  const titleVal = document.getElementById('quiz-title-input').value.trim() || 'My Custom Quiz';
+  const cards    = document.querySelectorAll('.q-builder-card');
+
+  if (cards.length === 0) {
+    showError('Add at least one question to launch.'); return;
+  }
+
+  const builtQuestions = [];
+  for (let i = 0; i < cards.length; i++) {
+    const card     = cards[i];
+    const qText    = card.querySelector('.q-text-input').value.trim();
+    const optInputs= card.querySelectorAll('.opt-builder-input');
+    const radio    = card.querySelector('.opt-correct-radio:checked');
+
+    if (!qText) { showError(`Question ${i+1} is missing the question text.`); return; }
+
+    const opts = Array.from(optInputs).map(o => o.value.trim());
+    const filled = opts.filter(Boolean);
+    if (filled.length < 2) { showError(`Question ${i+1} needs at least 2 options filled in.`); return; }
+    if (!radio)            { showError(`Question ${i+1} needs a correct answer selected (click a circle).`); return; }
+
+    const answerIdx = parseInt(radio.value);
+    if (!opts[answerIdx]) { showError(`Question ${i+1}: the selected correct answer option is empty.`); return; }
+
+    // fill blank options with placeholder so the array is always length 4
+    const finalOpts = opts.map((o, j) => o || `Option ${['A','B','C','D'][j]}`);
+    builtQuestions.push({ q: qText, options: finalOpts, answer: answerIdx });
+  }
+
+  // register as a special category
+  ALL_QUESTIONS['__custom__'] = {
+    name: titleVal, questions: builtQuestions
+  };
+  selectedCat = '__custom__';
+  questions   = shuffle([...builtQuestions]);
+  qIndex = 0; score = 0; timeSpent = []; results = [];
+  showScreen('screen-quiz');
+  renderQuestion();
+});
+
+function showError(msg) {
+  const el = document.getElementById('build-error');
+  el.textContent = '⚠ ' + msg;
+  el.classList.add('show');
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
 
 /* ────────── HELPERS ────────── */
 function showScreen(id) {
