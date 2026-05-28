@@ -45,12 +45,6 @@
   .brand {
     text-align: center; margin-bottom: 2.5rem;
   }
-  .brand-label {
-    font-family: var(--font-mono);
-    font-size: 0.7rem; letter-spacing: 0.25em;
-    color: var(--accent); text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
   .brand-title {
     font-size: clamp(2.8rem, 8vw, 4.5rem);
     font-weight: 800; line-height: 0.95;
