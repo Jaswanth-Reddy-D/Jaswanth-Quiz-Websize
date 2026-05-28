@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-<title>Quiz — Test Your Knowledge</title>
+<title>Quiz</title>
 <link rel="stylesheet" href="style.css">
 
 </head>
@@ -12,12 +12,37 @@
   <!-- ── CATEGORY SCREEN ── -->
   <div class="screen active" id="screen-cat">
     <div class="brand">
-      <p class="brand-label">// Knowledge Check</p>
       <h1 class="brand-title">Quiz<em>.</em></h1>
       <p class="brand-sub">Pick a category and test yourself</p>
     </div>
     <div class="cat-grid" id="cat-grid"></div>
+    
+    <!-- Custom Quiz Entry Card -->
+    <div class="custom-card" id="custom-card" style="margin-bottom:1.5rem">
+      <div class="custom-card-icon">✏️</div>
+      <div class="custom-card-body">
+        <div class="custom-card-name">Create Your Own Quiz</div>
+        <div class="custom-card-sub">Write custom questions &amp; play instantly</div>
+      </div>
+    </div>
     <button class="start-btn" id="start-btn" disabled>Choose a category to begin</button>
+  </div>
+
+  <!-- ── BUILDER SCREEN ── -->
+  <div class="screen" id="screen-builder">
+    <div class="builder-header">
+      <button class="back-btn" id="builder-back">←</button>
+      <div class="builder-title">Build Your Quiz</div>
+    </div>
+
+    <div class="builder-meta-row">
+      <input class="b-input" id="quiz-title-input" placeholder="Quiz title (e.g. My JS Quiz)" maxlength="40"/>
+    </div>
+
+    <div class="q-builder-list" id="q-builder-list"></div>
+    <button class="add-q-btn" id="add-q-btn">+ Add Question</button>
+    <div class="build-error" id="build-error"></div>
+    <button class="launch-btn" id="launch-btn">Launch Quiz →</button>
   </div>
 
   <!-- ── QUIZ SCREEN ── -->
