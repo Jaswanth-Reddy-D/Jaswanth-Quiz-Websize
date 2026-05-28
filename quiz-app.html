@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<title>Quiz — Test Your Knowledge</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div class="shell">
+
+  <!-- ── CATEGORY SCREEN ── -->
+  <div class="screen active" id="screen-cat">
+    <div class="brand">
+      <p class="brand-label">// Knowledge Check</p>
+      <h1 class="brand-title">Quiz<em>.</em></h1>
+      <p class="brand-sub">Pick a category and test yourself</p>
+    </div>
+    <div class="cat-grid" id="cat-grid"></div>
+    <button class="start-btn" id="start-btn" disabled>Choose a category to begin</button>
+  </div>
+
+  <!-- ── QUIZ SCREEN ── -->
+  <div class="screen" id="screen-quiz">
+    <div class="quiz-header">
+      <div class="q-meta">Question <strong id="q-num">1</strong> of <strong id="q-total">10</strong></div>
+      <div class="timer-wrap">
+        <div class="timer-ring">
+          <svg width="44" height="44" viewBox="0 0 44 44">
+            <circle class="timer-bg" cx="22" cy="22" r="18"/>
+            <circle class="timer-arc" id="timer-arc" cx="22" cy="22" r="18"
+              stroke-dasharray="113" stroke-dashoffset="0"/>
+          </svg>
+          <div class="timer-num" id="timer-num">15</div>
+        </div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="q-progress"></div></div>
+    <div class="question-card">
+      <p class="q-category" id="q-cat-label"></p>
+      <p class="q-text" id="q-text"></p>
+    </div>
+    <div class="options-grid" id="options-grid"></div>
+    <div class="feedback-bar" id="feedback-bar">
+      <span class="feedback-icon" id="feedback-icon"></span>
+      <span id="feedback-text"></span>
+    </div>
+    <button class="next-btn" id="next-btn">Next Question →</button>
+  </div>
+
+  <!-- ── RESULT SCREEN ── -->
+  <div class="screen" id="screen-result">
+    <div class="result-card">
+      <span class="result-emoji" id="r-emoji"></span>
+      <div class="result-grade" id="r-grade"></div>
+      <p class="result-label" id="r-label"></p>
+      <div class="result-stats">
+        <div class="r-stat c">
+          <div class="r-stat-num" id="r-correct"></div>
+          <div class="r-stat-label">Correct</div>
+        </div>
+        <div class="r-stat w">
+          <div class="r-stat-num" id="r-wrong"></div>
+          <div class="r-stat-label">Wrong</div>
+        </div>
+        <div class="r-stat t">
+          <div class="r-stat-num" id="r-time"></div>
+          <div class="r-stat-label">Avg Time</div>
+        </div>
+      </div>
+      <div class="review-list" id="review-list"></div>
+    </div>
+    <div class="action-row">
+      <button class="btn-retry" id="btn-retry">Play Again</button>
+      <button class="btn-menu" id="btn-menu">Categories</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Designed & built by <span>Jaswanth Reddy</span> · 2026</p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
